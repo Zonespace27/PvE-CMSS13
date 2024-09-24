@@ -311,7 +311,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	if(firer?.faction in neutral_factions)
 		on_neutral_faction_betray(firer.faction)
 
-	if(primary_weapon?.current_mag?.default_ammo?:max_distance <= get_dist(tied_human, firer))
+	if(primary_weapon?.ammo.max_range <= get_dist(tied_human, firer))
 		COOLDOWN_START(src, return_fire, return_fire_duration)
 
 	if(!faction_check(firer))
