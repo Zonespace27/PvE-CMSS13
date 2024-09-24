@@ -57,12 +57,11 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 		/obj/item/weapon/gun/shotgun,
 	)
 
-/datum/firearm_appraisal/shotgun/before_fire(obj/item/weapon/gun/shotgun/pump/firearm, mob/living/carbon/user, datum/human_ai_brain/AI)
+/datum/firearm_appraisal/shotgun/before_fire(obj/item/weapon/gun/shotgun/firearm, mob/living/carbon/user, datum/human_ai_brain/AI)
 	. = ..()
 	if(firearm.in_chamber)
 		return
 	firearm.unique_action(user)
-	firearm?.recent_pump = world.time
 
 /datum/firearm_appraisal/boltaction
 	gun_types = list(
