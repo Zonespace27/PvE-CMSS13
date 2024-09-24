@@ -62,7 +62,7 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 	if(firearm.in_chamber)
 		return
 	firearm.unique_action(user)
-	firearm.recent_pump = world.time
+	firearm?.recent_pump = world.time
 
 /datum/firearm_appraisal/boltaction
 	gun_types = list(
@@ -97,7 +97,7 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 	minimum_range = 5
 	optimal_range = 6
 	gun_types = list(
-		/obj/item/weapon/gun/launcher/rocket/anti_tank,
+		/obj/item/weapon/gun/launcher/rocket/anti_tank/disposable,
 	)
 	disposable = TRUE
 
@@ -105,4 +105,4 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 	gun_types = list(
 		/obj/item/weapon/gun/launcher/rocket
 	)
-	disposable = TRUE
+	disposable = FALSE
