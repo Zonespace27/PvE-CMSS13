@@ -216,8 +216,7 @@
 	if(!(current_target in viewers(view_distance, tied_human)))
 		if(COOLDOWN_FINISHED(src, return_fire))
 			end_gun_fire()
-		var/list/nades = equipment_map[HUMAN_AI_GRENADES]
-		if(grenading_allowed && length(nades))
+		if(grenading_allowed && length(equipment_map[HUMAN_AI_GRENADES]))
 			throw_grenade_cover()
 			return
 		if(overwatch_allowed)
