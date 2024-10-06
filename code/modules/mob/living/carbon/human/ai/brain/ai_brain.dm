@@ -40,6 +40,9 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	var/list/friendly_factions = list()
 	var/list/neutral_factions = list()
 	var/previous_faction
+	/// If false, cannot be assigned to a squad
+	var/can_assign_squad = TRUE
+	var/allowed_approach_retreat = TRUE
 
 /datum/human_ai_brain/New(mob/living/carbon/human/tied_human)
 	. = ..()
@@ -51,6 +54,8 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	RegisterSignal(tied_human, COMSIG_MOB_DROP_ITEM, PROC_REF(on_item_drop))
 	RegisterSignal(tied_human, COMSIG_MOVABLE_MOVED, PROC_REF(on_move))
 	RegisterSignal(tied_human, COMSIG_HUMAN_BULLET_ACT, PROC_REF(on_shot))
+	RegisterSignal(tied_human, COMSIG_HUMAN_HANDCUFFED, PROC_REF(on_handcuffed))
+	RegisterSignal(tied_human, COMSIG_HUMAN_GET_AI_BRAIN, PROC_REF(get_ai_brain))
 	if(!length(all_medical_items))
 		all_medical_items = brute_heal_items + burn_heal_items + tox_heal_items + oxy_heal_items + bleed_heal_items + bonebreak_heal_items + painkiller_items
 	GLOB.human_ai_brains += src
@@ -99,7 +104,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		reload_primary()
 
 	if(primary_weapon && current_target)
-		if(!has_ongoing_action(AI_ACTION_APPROACH) && !has_ongoing_action(AI_ACTION_RETREAT))
+		if(allowed_approach_retreat && !has_ongoing_action(AI_ACTION_APPROACH) && !has_ongoing_action(AI_ACTION_RETREAT))
 			var/target_futile = current_target.is_mob_incapacitated()
 			var/distance = get_dist(tied_human, current_target)
 			if(distance > gun_data.optimal_range || target_futile)
@@ -303,7 +308,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	if(firer?.faction in neutral_factions)
 		on_neutral_faction_betray(firer.faction)
 
-	if(primary_weapon?.ammo.max_range <= get_dist(tied_human, firer))
+	if(allowed_return_fire && (primary_weapon?.ammo.max_range <= get_dist(tied_human, firer)))
 		COOLDOWN_START(src, return_fire, return_fire_duration)
 
 	if(!faction_check(firer))
@@ -321,3 +326,24 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 	our_faction.remove_neutral_faction(faction)
 	our_faction.reapply_faction_data()
+
+/datum/human_ai_brain/proc/on_handcuffed(datum/source)
+	SIGNAL_HANDLER
+
+	if((tied_human.stat >= DEAD) || tied_human.client)
+		return
+
+	message_admins("AI human [tied_human.real_name] has been handcuffed while alive or unconscious.", tied_human.x, tied_human.y, tied_human.z)
+
+/datum/human_ai_brain/proc/get_ai_brain(datum/source, list/out_brain)
+	SIGNAL_HANDLER
+
+	out_brain += src
+
+
+/mob/living/carbon/human/proc/get_ai_brain()
+	RETURN_TYPE(/datum/human_ai_brain)
+
+	var/list/out_brain = list()
+	SEND_SIGNAL(src, COMSIG_HUMAN_GET_AI_BRAIN, out_brain)
+	return out_brain[1]
