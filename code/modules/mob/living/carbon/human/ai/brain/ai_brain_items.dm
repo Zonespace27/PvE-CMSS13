@@ -90,7 +90,7 @@
 		recalculate_containers()
 		appraise_inventory(slot == WEAR_WAIST, slot == WEAR_BACK, slot == WEAR_L_STORE, slot == WEAR_R_STORE)
 
-	if((!primary_weapon || primary_weapon?.w_class < equipment.w_class) && isgun(equipment))
+	if((!primary_weapon || (primary_weapon?.w_class < equipment.w_class)) && isgun(equipment))
 		set_primary_weapon(equipment)
 
 /datum/human_ai_brain/proc/on_item_unequip(datum/source, obj/item/equipment, slot)
