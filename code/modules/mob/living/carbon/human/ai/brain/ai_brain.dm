@@ -290,7 +290,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		var/obj/projectile/bullet = entering
 		if(ismob(bullet.firer))
 			if(!current_cover && !squad_covering && !faction_check(bullet.firer)) // If it's our own bullets, we don't need to be alarmed
-				if(!has_ongoing_action(/datum/ongoing_action/order/sniper_nest))
+				if(!has_ongoing_order(/datum/ongoing_action/order/sniper_nest))
 					try_cover(bullet)
 				enter_combat()
 
