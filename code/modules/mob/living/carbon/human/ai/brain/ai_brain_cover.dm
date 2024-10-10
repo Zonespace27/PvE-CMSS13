@@ -60,7 +60,7 @@
 
 
 /datum/human_ai_brain/proc/recursive_turf_cover_scan(turf/scan_turf, list/turf_dict, cover_dir, first_iteration = TRUE)
-	if(length(turf_dict) > 256)
+	if(length(turf_dict) > 200)
 		return FALSE // abort if the room is too large
 
 	if(scan_turf in turf_dict)
