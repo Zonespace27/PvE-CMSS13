@@ -139,7 +139,6 @@
 			best_cover = T
 
 	if(best_cover && best_cover != get_turf(tied_human))
-		current_cover = best_cover
 		turf_dict -= best_cover
 		// insert cover atom deletion/move comsigs here
 		ADD_ONGOING_ACTION(src, AI_ACTION_COVER, best_cover)
