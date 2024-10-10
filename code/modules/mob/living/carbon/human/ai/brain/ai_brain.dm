@@ -84,6 +84,8 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	ongoing_order = null
 	current_target = null
 
+	currently_reloading = FALSE
+
 	for(var/action in ongoing_actions)
 		qdel(action)
 
