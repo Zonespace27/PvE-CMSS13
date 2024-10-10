@@ -232,7 +232,7 @@
 /datum/human_ai_brain/proc/on_item_pickup(datum/source, obj/item/picked_up)
 	SIGNAL_HANDLER
 
-	if((!primary_weapon || primary_weapon.w_class < picked_up.w_class) && isgun(picked_up))
+	if((!primary_weapon || (primary_weapon.w_class < picked_up.w_class)) && isgun(picked_up))
 		set_primary_weapon(picked_up)
 
 /datum/human_ai_brain/proc/on_item_drop(datum/source, obj/item/dropped)
