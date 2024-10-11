@@ -121,7 +121,7 @@
 	if(target.stat == DEAD)
 		return FALSE
 
-	if(!shoot_to_kill && target.stat == UNCONSCIOUS)
+	if(!shoot_to_kill && (target.stat == UNCONSCIOUS || (locate(/datum/effects/crit) in target.effects_list)))
 		return FALSE
 
 	if(faction_check(target))
@@ -194,7 +194,7 @@
 			current_target = null
 			return
 
-		else if(current_target.stat == UNCONSCIOUS && !shoot_to_kill)
+		else if(!shoot_to_kill && (current_target.stat == UNCONSCIOUS || (locate(/datum/effects/crit) in current_target.effects_list)))
 			end_gun_fire()
 			current_target = null
 			return
