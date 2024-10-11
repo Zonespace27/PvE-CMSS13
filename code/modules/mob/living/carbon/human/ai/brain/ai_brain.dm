@@ -152,6 +152,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 /datum/human_ai_brain/proc/on_target_delete(datum/source, force)
 	SIGNAL_HANDLER
+	end_gun_fire()
 	current_target = null
 
 /datum/human_ai_brain/proc/ensure_primary_hand(obj/item/held_item)
@@ -303,6 +304,18 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 /datum/human_ai_brain/proc/enter_combat()
 	SIGNAL_HANDLER
+	if(squad_id) // call for help
+		var/datum/human_ai_squad/squad = SShuman_ai.squad_id_dict["[squad_id]"]
+		for(var/datum/human_ai_brain/squaddie as anything in squad.ai_in_squad)
+			if(squaddie.current_target)
+				continue
+			if(get_dist(squaddie.tied_human, tied_human) > squaddie.view_distance)
+				continue
+			if(!squaddie.can_target(current_target))
+				continue
+			squaddie.current_target = current_target
+			squaddie.RegisterSignal(current_target, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete))
+
 	if(tied_human.client)
 		return
 
@@ -353,6 +366,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		if(current_target != firer)
 			end_gun_fire()
 		current_target = firer
+		RegisterSignal(firer, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete))
 		if(!current_cover)
 			try_cover(bullet)
 		else if(in_cover)
