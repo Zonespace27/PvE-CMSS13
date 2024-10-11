@@ -17,6 +17,7 @@
 
 	if(get_dist(cover_turf, brain.tied_human) > 0)
 		if(!brain.move_to_next_turf(cover_turf))
+			brain.end_cover()
 			return ONGOING_ACTION_COMPLETED
 
 		if(get_dist(cover_turf, brain.tied_human) > 0)
