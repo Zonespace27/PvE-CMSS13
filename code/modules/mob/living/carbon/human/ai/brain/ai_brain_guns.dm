@@ -71,7 +71,7 @@
 			else
 				tied_human.drop_held_item(mag)
 	else
-		primary_weapon.attackby(mag, tied_human)
+		primary_weapon?.attackby(mag, tied_human)
 	sleep(short_action_delay * action_delay_mult)
 	tied_human.swap_hand()
 	primary_weapon.wield(tied_human)
