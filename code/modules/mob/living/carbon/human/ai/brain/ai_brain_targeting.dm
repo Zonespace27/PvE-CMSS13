@@ -141,9 +141,9 @@
 
 	if(!(primary_weapon in tied_human.get_hands()))
 		unholster_primary()
-		primary_weapon.guaranteed_delay_time = world.time
-		primary_weapon.wield_time = world.time
-		primary_weapon.pull_time = world.time
+		primary_weapon?.guaranteed_delay_time = world.time
+		primary_weapon?.wield_time = world.time
+		primary_weapon?.pull_time = world.time
 
 	tied_human.face_atom(current_target)
 	tied_human.a_intent = INTENT_HARM
@@ -152,7 +152,7 @@
 		currently_busy = FALSE
 		return
 
-	primary_weapon.set_target(current_target)
+	primary_weapon?.set_target(current_target)
 	gun_data.before_fire(primary_weapon, tied_human, src)
 	if((!primary_weapon?.current_mag?.current_rounds && !primary_weapon?.in_chamber) || !friendly_check())
 		end_gun_fire()
@@ -161,7 +161,7 @@
 	currently_firing = TRUE
 	enter_combat()
 	RegisterSignal(tied_human, COMSIG_MOB_FIRED_GUN, PROC_REF(on_gun_fire), TRUE)
-	primary_weapon.start_fire(object = current_target, bypass_checks = TRUE)
+	primary_weapon?.start_fire(object = current_target, bypass_checks = TRUE)
 
 /datum/human_ai_brain/proc/friendly_check()
 	var/list/turf_list = get_line(get_turf(tied_human), get_turf(current_target))
