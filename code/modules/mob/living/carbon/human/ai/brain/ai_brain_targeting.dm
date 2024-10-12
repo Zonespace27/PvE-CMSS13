@@ -136,8 +136,9 @@
 	set waitfor = FALSE
 
 	if(!current_target)
-		currently_busy = FALSE
 		return
+
+	currently_busy = TRUE
 
 	if(!(primary_weapon in tied_human.get_hands()))
 		unholster_primary()

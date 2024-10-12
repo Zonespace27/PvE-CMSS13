@@ -136,7 +136,6 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 				ADD_ONGOING_ACTION(src, AI_ACTION_RETREAT, current_target, walk_distance)
 
 		if(!currently_busy && !currently_firing && !currently_reloading && COOLDOWN_FINISHED(src, fire_overload_cooldown))
-			currently_busy = TRUE
 			attack_target()
 
 	if(!currently_busy && !current_target && primary_weapon)
