@@ -41,6 +41,7 @@
 		return
 
 	currently_reloading = TRUE
+	currently_busy = TRUE
 
 	var/obj/item/ammo_magazine/mag = primary_ammo_search()
 	if(!mag)
@@ -49,6 +50,7 @@
 		to_chat(world, "[tied_human.name] tried to reload without ammo.")
 #endif
 		currently_reloading = FALSE
+		currently_busy = FALSE
 		return //soz
 	unholster_primary()
 	ensure_primary_hand(primary_weapon)
@@ -79,6 +81,7 @@
 	to_chat(world, "[tied_human.name] reloaded [primary_weapon].")
 #endif
 	currently_reloading = FALSE
+	currently_busy = FALSE
 
 /datum/human_ai_brain/proc/primary_ammo_search()
 	for(var/obj/item/ammo_magazine/mag as anything in equipment_map[HUMAN_AI_AMMUNITION])
