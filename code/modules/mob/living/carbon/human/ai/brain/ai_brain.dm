@@ -141,7 +141,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 	if(!currently_busy && !current_target && primary_weapon)
 		current_target = get_target(view_distance)
-		RegisterSignal(current_target, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete))
+		RegisterSignal(current_target, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete), TRUE)
 
 	if(!currently_busy && !in_combat && healing_start_check())
 		start_healing()
@@ -314,7 +314,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 			if(!squaddie.can_target(current_target))
 				continue
 			squaddie.current_target = current_target
-			squaddie.RegisterSignal(current_target, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete))
+			squaddie.RegisterSignal(current_target, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete), TRUE)
 
 	if(tied_human.client)
 		return
@@ -366,7 +366,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		if(current_target != firer)
 			end_gun_fire()
 		current_target = firer
-		RegisterSignal(firer, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete))
+		RegisterSignal(firer, COMSIG_PARENT_QDELETING, PROC_REF(on_target_delete), TRUE)
 		if(!current_cover)
 			try_cover(bullet)
 		else if(in_cover)
