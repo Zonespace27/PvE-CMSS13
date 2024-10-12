@@ -119,7 +119,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	nade_throwback(things_around)
 	item_search(things_around)
 
-	if(!currently_reloading && should_reload_primary())
+	if(!currently_busy && !currently_reloading && should_reload_primary())
 		reload_primary()
 
 	if(primary_weapon && current_target)
@@ -329,7 +329,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		return
 
 	if(in_combat)
-		tied_human.a_intent = INTENT_HELP
+		tied_human.a_intent = INTENT_DISARM
 		current_target = null
 		say_exit_combat_line()
 		holster_primary()
