@@ -1,16 +1,16 @@
-/datum/ongoing_action/melee_atom
+/datum/ai_action/melee_atom
 	name = "Melee Atom"
 	var/atom/target
 
-/datum/ongoing_action/melee_atom/New(datum/human_ai_brain/brain, list/arguments)
+/datum/ai_action/melee_atom/New(datum/human_ai_brain/brain)
 	. = ..()
-	target = arguments[2]
+	//target = arguments[2]
 
-/datum/ongoing_action/melee_atom/Destroy(force, ...)
+/datum/ai_action/melee_atom/Destroy(force, ...)
 	target = null
 	return ..()
 
-/datum/ongoing_action/melee_atom/trigger_action()
+/datum/ai_action/melee_atom/trigger_action()
 	if(QDELETED(target) || brain.in_combat || !brain.primary_weapon) // Lower priority than getting shot at
 		return ONGOING_ACTION_COMPLETED
 

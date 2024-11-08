@@ -169,4 +169,5 @@
 	if(QDELETED(src) || (loc != user))
 		return
 
-	user.throw_item(ai_brain.target_floor)
+	user.face_atom(target_turf)
+	user.throw_item(target_turf)

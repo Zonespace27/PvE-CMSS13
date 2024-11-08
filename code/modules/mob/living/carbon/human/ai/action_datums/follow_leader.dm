@@ -1,0 +1,54 @@
+/datum/ai_action/follow_leader
+	name = "Follow Leader"
+	action_flags = ACTION_USING_LEGS
+	var/follow_distance = 1
+
+/datum/ai_action/follow_leader/get_weight(datum/human_ai_brain/brain)
+	if(brain.in_combat)
+		return 0
+
+	if(brain.is_squad_leader)
+		return 0
+
+	if(length(brain.to_pickup))
+		return 0
+
+	var/datum/human_ai_squad/squad = SShuman_ai.squad_id_dict["[brain.squad_id]"]
+	if(!squad)
+		return 0
+
+	var/mob/squad_leader = squad.squad_leader?.tied_human
+	if(!squad_leader)
+		return 0
+
+	/// Mild case of setting up variables in singleton
+	/// Avoid populating any until you know what you're doing
+	follow_distance = 1 + length(squad.ai_in_squad) / 2
+
+	if(get_dist(brain.tied_human, squad_leader) <= follow_distance)
+		return 0
+
+	return 4
+
+/datum/ai_action/follow_leader/New(datum/human_ai_brain/brain)
+	. = ..()
+	if(brain?.squad_id)
+		var/datum/human_ai_squad/squad = SShuman_ai.squad_id_dict["[brain.squad_id]"]
+		follow_distance = 1 + length(squad.ai_in_squad) / 2
+
+/datum/ai_action/follow_leader/trigger_action()
+	if(brain.in_combat || length(brain.to_pickup))
+		return ONGOING_ACTION_COMPLETED
+
+	var/datum/human_ai_squad/squad = SShuman_ai.squad_id_dict["[brain.squad_id]"]
+	var/mob/squad_leader = squad.squad_leader?.tied_human
+
+	var/mob/tied_human = brain.tied_human
+	if(get_dist(squad_leader, tied_human) > follow_distance)
+		if(!brain.move_to_next_turf(squad_leader))
+			return ONGOING_ACTION_COMPLETED
+
+		if(get_dist(squad_leader, tied_human) > follow_distance)
+			return ONGOING_ACTION_UNFINISHED
+
+	return ONGOING_ACTION_COMPLETED

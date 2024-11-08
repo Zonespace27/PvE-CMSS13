@@ -12,7 +12,7 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 	/// Optimal engagement range, try to stay at this distance
 	var/optimal_range = 6
 	/// Maximum engagement range, stop firing at this distance
-	var/maximum_range = 9
+	var/maximum_range = 16
 	/// How many rounds to fire in 1 burst at most
 	var/burst_amount_max = 8
 	/// List of types that set the human AI to this appraisal type
@@ -22,7 +22,8 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 
 /// List of things we do before our next fire based on weapon type
 /datum/firearm_appraisal/proc/before_fire(obj/item/weapon/gun/firearm, mob/living/carbon/user, datum/human_ai_brain/AI)
-	SHOULD_CALL_PARENT(TRUE) // Every weapon can be twohanded
+	SHOULD_CALL_PARENT(TRUE) // Every weapon may be twohanded or have safety
+	set waitfor = FALSE
 
 	AI.ensure_primary_hand(firearm)
 	if((firearm.flags_item & TWOHANDED) && !(firearm.flags_item & WIELDED))
@@ -34,6 +35,7 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 		firearm.gun_safety_handle(user)
 
 /datum/firearm_appraisal/sniper
+	optimal_range = 7
 	maximum_range = 30
 	burst_amount_max = 1
 	gun_types = list(
@@ -56,6 +58,7 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 	burst_amount_max = 10
 	minimum_range = 1
 	optimal_range = 5
+	maximum_range = 10
 	gun_types = list(
 		/obj/item/weapon/gun/smg,
 	)
@@ -76,6 +79,7 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 	firearm.unique_action(user)
 
 /datum/firearm_appraisal/boltaction
+	optimal_range = 7
 	maximum_range = 30
 	burst_amount_max = 1
 	gun_types = list(
