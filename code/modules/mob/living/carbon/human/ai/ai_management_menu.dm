@@ -152,7 +152,7 @@
 
 /client/proc/make_human_ai(mob/living/carbon/human/H in GLOB.human_mob_list)
 	set name = "Make AI"
-	set desc = "Add AI component to mob"
+	set desc = "Add AI functionality to a human."
 	set category = null
 
 	if(!check_rights(R_DEBUG|R_ADMIN))

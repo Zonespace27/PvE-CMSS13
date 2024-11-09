@@ -10,7 +10,7 @@
 
 /datum/ai_order/Destroy(force, ...)
 	SShuman_ai.existing_orders -= src
-	. = ..()
+	return ..()
 
 /datum/ai_order/proc/tgui_data()
 	return list()

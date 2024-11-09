@@ -60,7 +60,7 @@
 		smallest_distance = distance
 
 	for(var/obj/vehicle/multitile/potential_vehicle_target as anything in GLOB.all_multi_vehicles)
-		if(tied_human.z != potential_vehicle_target.z)
+		if(tied_human.z != potential_vehicle_target.z) //todo: make this work
 			continue
 
 		if(!(tied_human in viewers(view_distance, potential_vehicle_target)))
@@ -68,7 +68,7 @@
 
 		var/distance = get_dist(tied_human, potential_vehicle_target)
 
-		/// Vehicles are big and lousy, no need to consider our rear view penalty
+		// Vehicles are big and lousy, no need to consider our rear view penalty
 		if(distance > view_distance)
 			continue
 
@@ -98,7 +98,7 @@
 
 		var/distance = get_dist(tied_human, potential_defense_target)
 
-		/// Let's just not rear check a loud ass CLANK CLANK CLANK servo sentry
+		// Let's just not rear check a loud ass CLANK CLANK CLANK servo sentry
 		if(distance > view_distance)
 			continue
 

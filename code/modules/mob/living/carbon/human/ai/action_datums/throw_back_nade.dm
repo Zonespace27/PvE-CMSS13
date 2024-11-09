@@ -79,7 +79,7 @@
 					break
 
 		if(!place_to_throw)
-			/// There's friendlies all around us, apparently. Just uh. Die ig.
+			// There's friendlies all around us, apparently. Just uh. Die ig.
 			return ONGOING_ACTION_COMPLETED
 
 	brain.clear_main_hand()

@@ -21,8 +21,8 @@
 	if(!squad_leader)
 		return 0
 
-	/// Mild case of setting up variables in singleton
-	/// Avoid populating any until you know what you're doing
+	// Mild case of setting up variables in singleton
+	// Avoid populating any until you know what you're doing
 	follow_distance = 1 + length(squad.ai_in_squad) / 2
 
 	if(get_dist(brain.tied_human, squad_leader) <= follow_distance)

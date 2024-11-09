@@ -10,7 +10,7 @@
 	return 11
 
 /datum/ai_action/item_pickup/Added()
-	/// If we already have a primary weapon, don't set to_pickup and action will be killed immideately
+	// If we already have a primary weapon, don't set to_pickup and action will be killed immideately
 	if(isgun(to_pickup) && brain.primary_weapon)
 		return
 
