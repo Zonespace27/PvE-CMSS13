@@ -7,21 +7,22 @@
 	if(!length(brain.to_pickup))
 		return 0
 
-	if(!isturf(brain.to_pickup[1].loc))
-		return 0
-
 	return 11
 
-/datum/ai_action/item_pickup/New(datum/human_ai_brain/brain)
-	. = ..()
-	if(brain)
-		to_pickup = brain.to_pickup[1]
+/datum/ai_action/item_pickup/Added()
+	/// If we already have a primary weapon, don't set to_pickup and action will be killed immideately
+	if(isgun(to_pickup) && brain.primary_weapon)
+		return
+
+	to_pickup = brain.to_pickup[1]
 
 /datum/ai_action/item_pickup/Destroy(force, ...)
 	to_pickup = null
 	return ..()
 
 /datum/ai_action/item_pickup/trigger_action()
+	. = ..()
+
 	if(QDELETED(to_pickup) || !isturf(to_pickup.loc))
 		brain.UnregisterSignal(to_pickup, COMSIG_PARENT_QDELETING)
 		brain.to_pickup -= to_pickup
@@ -54,29 +55,31 @@
 
 	if(istype(to_pickup, /obj/item/storage/belt) && !brain.container_refs["belt"])
 		tied_human.put_in_hands(to_pickup, TRUE)
-		tied_human.equip_to_slot(to_pickup, WEAR_WAIST)
+		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, equip_to_slot), to_pickup, WEAR_WAIST)
 		return ONGOING_ACTION_COMPLETED
 
 	if(istype(to_pickup, /obj/item/storage/backpack) && !brain.container_refs["backpack"])
 		tied_human.put_in_hands(to_pickup, TRUE)
-		tied_human.equip_to_slot(to_pickup, WEAR_BACK)
+		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, equip_to_slot), to_pickup, WEAR_BACK)
 		return ONGOING_ACTION_COMPLETED
 
 	if(istype(to_pickup, /obj/item/storage/pouch) && !brain.container_refs["left_pocket"])
 		tied_human.put_in_hands(to_pickup, TRUE)
-		tied_human.equip_to_slot(to_pickup, WEAR_L_STORE)
+		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, equip_to_slot), to_pickup, WEAR_L_STORE)
 		return ONGOING_ACTION_COMPLETED
 
 	if(istype(to_pickup, /obj/item/storage/pouch) && !brain.container_refs["right_pocket"])
 		tied_human.put_in_hands(to_pickup, TRUE)
-		tied_human.equip_to_slot(to_pickup, WEAR_R_STORE)
+		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, equip_to_slot), to_pickup, WEAR_R_STORE)
 		return ONGOING_ACTION_COMPLETED
 
 	var/storage_spot = brain.storage_has_room(to_pickup)
 	if(!storage_spot || !to_pickup.ai_can_use(tied_human, brain, tied_human))
+		brain.UnregisterSignal(to_pickup, COMSIG_PARENT_QDELETING)
+		brain.to_pickup -= to_pickup
 		return ONGOING_ACTION_COMPLETED
 
-	if(is_type_in_list(to_pickup, brain.all_medical_items))
+	if(to_pickup.flags_human_ai & HEALING_ITEM)
 		tied_human.put_in_hands(to_pickup, TRUE)
 		brain.store_item(to_pickup, storage_spot, HUMAN_AI_HEALTHITEMS)
 		return ONGOING_ACTION_COMPLETED

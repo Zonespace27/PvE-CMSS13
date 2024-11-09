@@ -12,6 +12,8 @@
 	return 15
 
 /datum/ai_action/take_cover/trigger_action()
+	. = ..()
+
 	var/turf/current_cover = brain.current_cover
 	if(!brain.current_cover)
 		return ONGOING_ACTION_COMPLETED

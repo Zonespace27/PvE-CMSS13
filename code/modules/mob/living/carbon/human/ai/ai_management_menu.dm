@@ -147,6 +147,7 @@
 		return
 
 	ai_human.get_ai_brain().appraise_inventory()
+	ai_human.face_dir(pick(GLOB.cardinals))
 	ai_human.forceMove(get_turf(mob))
 
 /client/proc/make_human_ai(mob/living/carbon/human/H in GLOB.human_mob_list)

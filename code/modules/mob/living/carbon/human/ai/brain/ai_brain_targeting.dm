@@ -41,13 +41,14 @@
 			continue
 
 		var/distance = get_dist(tied_human, potential_target)
-
 		if(distance > view_distance)
-			var/rear_view_check = scope_vision && (get_dir(tied_human, potential_target) in reverse_nearby_direction(tied_human.dir))
-			if(!rear_view_check || (distance > view_distance - rear_view_penalty))
-				continue
+			continue
 
 		if(scope_vision && (distance > 7) && !(get_dir(tied_human, potential_target) in dir_cone))
+			continue
+
+		var/rear_view_check = scope_vision && (get_dir(tied_human, potential_target) in reverse_nearby_direction(tied_human.dir))
+		if(rear_view_check && (distance > view_distance - rear_view_penalty))
 			continue
 
 		viable_targets += potential_target

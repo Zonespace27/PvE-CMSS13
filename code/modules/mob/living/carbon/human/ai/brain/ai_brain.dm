@@ -18,9 +18,6 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	/// Should we limit our FOV in case view_distance is more than 7
 	var/scope_vision = TRUE
 
-	/// How far the AI will chuck a nade if they can't find an enemy to throw it back at
-	var/nade_throwback_dist = 4
-
 	/// List of whitelisted/blacklisted action datums
 	var/list/action_whitelist = null
 	var/list/action_blacklist = null
@@ -36,16 +33,17 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	var/in_combat = FALSE
 	var/combat_decay_time_min = 15 SECONDS
 	var/combat_decay_time_max = 30 SECONDS
-	var/squad_covering = FALSE
 
-	var/peek_cover_chance = 35
+	var/peek_cover_chance = 60
 
 	var/list/friendly_factions = list()
 	var/list/neutral_factions = list()
 	var/previous_faction
+
+	var/squad_covering = FALSE
+
 	/// If false, cannot be assigned to a squad
 	var/can_assign_squad = TRUE
-	var/allowed_approach_retreat = TRUE
 
 /datum/human_ai_brain/New(mob/living/carbon/human/tied_human)
 	. = ..()
@@ -60,8 +58,6 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	RegisterSignal(tied_human, COMSIG_HUMAN_BULLET_ACT, PROC_REF(on_shot))
 	RegisterSignal(tied_human, COMSIG_HUMAN_HANDCUFFED, PROC_REF(on_handcuffed))
 	RegisterSignal(tied_human, COMSIG_HUMAN_GET_AI_BRAIN, PROC_REF(get_ai_brain))
-	if(!length(all_medical_items))
-		all_medical_items = brute_heal_items + burn_heal_items + tox_heal_items + oxy_heal_items + bleed_heal_items + bonebreak_heal_items + painkiller_items
 	GLOB.human_ai_brains += src
 	setup_detection_radius()
 	appraise_inventory()
@@ -75,11 +71,11 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	return ..()
 
 /datum/human_ai_brain/proc/reset_ai()
-	set_primary_weapon(null)
 	end_cover()
-	//primary_melee = null
 
-	gun_data = null
+	in_combat = FALSE
+
+
 	target_turf = null
 	shot_at = null
 	lose_target()
@@ -97,15 +93,16 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		lose_target()
 		return
 
-	/// Might be wise to move these off tick and instead make them signal-based
-	item_search(range(2, tied_human))
-
-	if(QDELETED(current_target))
-		lose_target()
-		set_target(get_target())
+	lose_target()
+	var/possible_target = get_target()
+	if(possible_target)
+		set_target(possible_target)
 
 	if(current_target)
 		enter_combat()
+
+	/// Might be wise to move this off tick and instead make it signal-based
+	item_search(range(2, tied_human))
 
 	/// List all allowed action types for AI to consider
 	var/list/allowed_actions = action_whitelist || GLOB.AI_actions.Copy() - action_blacklist
@@ -115,14 +112,14 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 	/// Create assoc list of selected AI actions and their weight
 	var/list/possible_actions = list()
-	for(var/action_type in allowed_actions)
+	for(var/action_type in shuffle(allowed_actions))
 		var/datum/ai_action/glob_ref = GLOB.AI_actions[action_type]
 		var/weight = glob_ref.get_weight(src)
 		if(weight) // No weight means we shouldn't consider this action at all
 			possible_actions[action_type] = weight
 
 	/// Sorts all allowed actions by their weight
-	var/list/sorted_actions = sortTim(shuffle(possible_actions), GLOBAL_PROC_REF(cmp_numeric_asc), TRUE)
+	var/list/sorted_actions = sortTim(possible_actions, GLOBAL_PROC_REF(cmp_numeric_dsc), TRUE)
 
 	/// Choose what actions to start in current process() iteration
 	for(var/action_type as anything in sorted_actions)
@@ -138,7 +135,9 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 			continue
 
 		ongoing_actions += new action_type(src)
-		message_admins("action of type [action_type] was added") // TEST THING
+#ifdef TESTING
+		message_admins("action of type [action_type] was added to [tied_human.real_name]")
+#endif
 
 	for(var/datum/ai_action/action as anything in ongoing_actions)
 		var/retval = action.trigger_action()
@@ -258,13 +257,21 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 	if(istype(entering, /obj/projectile))
 		var/obj/projectile/bullet = entering
-		if(!ismob(bullet.firer))
+
+		enter_combat()
+
+		var/mob/firer = bullet.firer
+		if(firer?.faction in neutral_factions)
+			on_neutral_faction_betray(firer.faction)
+
+		if(faction_check(firer))
 			return
 
-		if(!current_cover && !squad_covering && !faction_check(bullet.firer)) // If it's our own bullets, we don't need to be alarmed
-			if(!istype(current_order, /datum/ai_action/sniper_nest))
-				try_cover(bullet)
-			enter_combat()
+		if(get_dist(tied_human, firer) <= view_distance)
+			set_target(firer)
+		else
+			COOLDOWN_START(src, fire_offscreen, 4 SECONDS)
+			target_turf = get_turf(firer)
 
 /datum/human_ai_brain/proc/on_move(atom/oldloc, direction, forced)
 	setup_detection_radius()
@@ -303,7 +310,8 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		tied_human.a_intent = INTENT_DISARM
 		lose_target()
 		say_exit_combat_line()
-		holster_primary()
+		if(!sniper_home)
+			holster_primary()
 
 	if(current_cover)
 		if(!prob(peek_cover_chance))
@@ -319,19 +327,25 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	if(tied_human.client)
 		return
 
+	enter_combat()
+
 	var/mob/firer = bullet.firer
 	if(firer?.faction in neutral_factions)
 		on_neutral_faction_betray(firer.faction)
 
-	if(get_dist(tied_human, firer) > view_distance)
-		COOLDOWN_START(src, fire_offscreen, 2 SECONDS)
+	if(faction_check(firer))
+		return
 
-	if(!faction_check(firer))
+	if(get_dist(tied_human, firer) <= view_distance)
 		set_target(firer)
-		if(!current_cover)
-			try_cover(bullet)
-		else if(in_cover)
-			on_shot_inside_cover(bullet)
+	else
+		COOLDOWN_START(src, fire_offscreen, 4 SECONDS)
+		target_turf = get_turf(firer)
+
+	if(!current_cover)
+		try_cover(bullet)
+	else if(in_cover)
+		on_shot_inside_cover(bullet)
 
 /datum/human_ai_brain/proc/on_neutral_faction_betray(faction)
 	if(!tied_human.faction)

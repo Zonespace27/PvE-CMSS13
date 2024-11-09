@@ -28,16 +28,16 @@
 	. += /datum/ai_action/chase_target
 	. += /datum/ai_action/sniper_nest
 
-/datum/ai_action/throw_grenade/New(datum/human_ai_brain/brain)
-	. = ..()
-	if(brain)
-		throwing = locate() in brain.equipment_map[HUMAN_AI_GRENADES]
+/datum/ai_action/throw_grenade/Added()
+	throwing = locate() in brain.equipment_map[HUMAN_AI_GRENADES]
 
 /datum/ai_action/throw_grenade/Destroy(force, ...)
 	throwing = null
 	return ..()
 
 /datum/ai_action/throw_grenade/trigger_action()
+	. = ..()
+
 	var/turf/target_turf = brain.target_turf
 	if(QDELETED(throwing) || !target_turf)
 		return ONGOING_ACTION_COMPLETED
@@ -53,7 +53,6 @@
 
 	mid_throw = TRUE
 	brain.equip_item_from_equipment_map(HUMAN_AI_GRENADES, throwing)
-	sleep(brain.short_action_delay * brain.action_delay_mult)
 
 	if(QDELETED(throwing) || (throwing.loc != tied_human))
 		return ONGOING_ACTION_COMPLETED

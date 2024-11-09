@@ -45,6 +45,8 @@
 	brain.primary_weapon?.set_target(null)
 
 /datum/ai_action/fire_at_target/trigger_action()
+	. = ..()
+
 	var/obj/item/weapon/gun/primary_weapon = brain.primary_weapon
 	if(!primary_weapon || brain.active_grenade_found)
 		return ONGOING_ACTION_COMPLETED
@@ -59,9 +61,6 @@
 	var/mob/living/carbon/tied_human = brain.tied_human
 	if(!(primary_weapon in tied_human.get_hands()))
 		brain.unholster_primary()
-		primary_weapon?.guaranteed_delay_time = world.time
-		primary_weapon?.wield_time = world.time
-		primary_weapon?.pull_time = world.time
 
 	var/datum/firearm_appraisal/gun_data = brain.gun_data
 	gun_data.before_fire(primary_weapon, tied_human, brain)
@@ -91,6 +90,9 @@
 	var/mob/living/carbon/tied_human = brain.tied_human
 	var/list/turf_list = get_line(get_turf(tied_human), get_turf(target))
 	for(var/turf/tile in turf_list)
+		if(get_dist(tied_human, tile) > brain.view_distance)
+			continue
+
 		if(tile.density)
 			return FALSE
 

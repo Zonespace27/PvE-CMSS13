@@ -19,6 +19,8 @@
 	. += /datum/ai_action/throw_grenade
 
 /datum/ai_action/chase_target/trigger_action()
+	. = ..()
+
 	var/turf/target_turf = brain.target_turf
 	if(QDELETED(target_turf) || brain.current_target)
 		return ONGOING_ACTION_COMPLETED

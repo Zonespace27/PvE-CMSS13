@@ -7,7 +7,7 @@
 	var/current_waypoint_index = 1
 
 	var/increment = 1
-	var/waiting = TRUE
+	var/waiting = FALSE
 
 /datum/ai_order/patrol/New(list/arguments)
 	. = ..()

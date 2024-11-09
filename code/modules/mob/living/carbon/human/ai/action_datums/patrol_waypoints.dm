@@ -20,9 +20,11 @@
 		if(get_dist(brain.tied_human, current_order.current_waypoint) <= 1)
 			return 0
 
-	return 5
+	return 4
 
 /datum/ai_action/patrol_waypoints/trigger_action()
+	. = ..()
+
 	var/datum/ai_order/patrol/current_order = brain.current_order
 	if(current_order.waiting || QDELETED(current_order) || !istype(current_order) || length(brain.to_pickup))
 		return ONGOING_ACTION_COMPLETED

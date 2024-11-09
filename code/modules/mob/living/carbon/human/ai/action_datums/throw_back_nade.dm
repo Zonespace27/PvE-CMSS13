@@ -20,6 +20,8 @@
 	return ..()
 
 /datum/ai_action/throw_back_nade/trigger_action()
+	. = ..()
+
 	var/atom/active_grenade_found = brain.active_grenade_found
 	if(QDELETED(active_grenade_found) || !isturf(active_grenade_found.loc))
 		return ONGOING_ACTION_COMPLETED
@@ -84,7 +86,7 @@
 	tied_human.put_in_active_hand(active_grenade_found)
 
 	tied_human.toggle_throw_mode(THROW_MODE_NORMAL)
-	tied_human.throw_item(place_to_throw)
+	INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, throw_item), place_to_throw)
 
 	tied_human.face_atom(place_to_throw)
 	brain.to_pickup -= active_grenade_found // Do NOT play fetch. Please.

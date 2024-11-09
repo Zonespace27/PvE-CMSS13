@@ -30,6 +30,8 @@
 	return 0
 
 /datum/ai_action/keep_distance/trigger_action()
+	. = ..()
+
 	if(!brain.current_target)
 		return ONGOING_ACTION_COMPLETED
 

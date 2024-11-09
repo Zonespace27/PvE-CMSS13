@@ -157,6 +157,7 @@
 	return TRUE
 
 /obj/item/explosive/grenade/ai_use(mob/living/carbon/human/user, datum/human_ai_brain/ai_brain, turf/target_turf)
+	sleep(ai_brain.short_action_delay * ai_brain.action_delay_mult)
 	attack_self(user)
 	user.toggle_throw_mode(THROW_MODE_NORMAL)
 	ai_brain.ensure_primary_hand(src)

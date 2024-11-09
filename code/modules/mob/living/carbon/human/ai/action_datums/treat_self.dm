@@ -3,10 +3,11 @@
 	action_flags = ACTION_USING_HANDS
 
 /datum/ai_action/treat_self/get_weight(datum/human_ai_brain/brain)
-	if(brain.current_target)
+	if(brain.healing_someone)
 		return 0
 
-	if(brain.healing_someone)
+	var/should_fire_offscreen = (brain.target_turf && !COOLDOWN_FINISHED(brain, fire_offscreen))
+	if(brain.current_target || should_fire_offscreen)
 		return 0
 
 	if(length(brain.to_pickup))
@@ -25,6 +26,8 @@
 	return ..()
 
 /datum/ai_action/treat_self/trigger_action()
+	. = ..()
+
 	if(brain.current_target)
 		return ONGOING_ACTION_COMPLETED
 

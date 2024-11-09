@@ -30,12 +30,21 @@ GLOBAL_LIST_INIT_TYPED(AI_actions, /datum/ai_action, setup_ai_actions())
 
 /datum/ai_action/New(datum/human_ai_brain/brain)
 	. = ..()
+
+	if(!brain)
+		return
+
 	src.brain = brain
+	Added()
+
+/datum/ai_action/proc/Added()
+	return
 
 /datum/ai_action/Destroy(force, ...)
 	brain = null
 	return ..()
 
 /datum/ai_action/proc/trigger_action()
-	//SHOULD_NOT_SLEEP(TRUE) make all loop actions ASYNC for the sake of parralel use
-	return ONGOING_ACTION_COMPLETED
+	SHOULD_NOT_SLEEP(TRUE)
+	if(!brain)
+		return ONGOING_ACTION_COMPLETED

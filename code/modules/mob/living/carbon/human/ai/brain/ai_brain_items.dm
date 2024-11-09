@@ -50,9 +50,10 @@
 	var/obj/item/storage/storage_object = get_object_from_loc(object_loc)
 
 	storage_object.remove_from_storage(object_ref, tied_human)
-	tied_human.put_in_active_hand(object_ref)
 	equipped_items_original_loc[object_ref] = object_loc
 	RegisterSignal(object_ref, COMSIG_ITEM_DROPPED, PROC_REF(on_equipment_dropped), override = TRUE)
+
+	return tied_human.put_in_active_hand(object_ref)
 
 /datum/human_ai_brain/proc/get_item_from_equipment_map_path(object_path, object_type)
 	return (locate(object_path) in equipment_map[object_type])
@@ -217,7 +218,8 @@
 		return
 
 	if(primary_weapon == active_hand)
-		holster_primary()
+		if(!holster_primary())
+			tied_human.drop_held_item(active_hand)
 		return
 
 	var/storage_id = storage_has_room(active_hand)
@@ -347,7 +349,7 @@
 			if(!storage_spot || !thing.ai_can_use(tied_human, src, tied_human))
 				continue
 
-			if(is_type_in_list(thing, all_medical_items))
+			if(thing.flags_human_ai & HEALING_ITEM)
 				to_pickup += thing
 				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
 

@@ -47,9 +47,6 @@
 		/obj/item/storage/pill_bottle/tramadol,
 	)
 
-	/// Populated in New()
-	var/static/list/all_medical_items = list()
-
 	/// At what percentage of max HP to start searching for medical treatment
 	var/healing_start_threshold = 0.7
 	/// Requires this much damage of one type to consider it a problem
@@ -70,7 +67,7 @@
 	set waitfor = FALSE
 
 	healing_someone = TRUE
-	holster_primary()
+
 	// Prioritize brute, then bleed, then broken bones, then burn, then pain, then tox, then oxy.
 	if(target.getBruteLoss() > damage_problem_threshold)
 		var/obj/item/brute_heal
@@ -82,8 +79,12 @@
 		if(!brute_heal)
 			goto bleed
 
+		if(!equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, brute_heal))
+			healing_someone = FALSE
+			return
+
+		clear_main_hand()
 		healing_someone = TRUE
-		equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, brute_heal)
 		sleep(short_action_delay)
 		brute_heal.ai_use(tied_human, src, target)
 		if(QDELETED(brute_heal))
@@ -109,8 +110,12 @@
 			if(!bleed_heal)
 				goto bone
 
+			if(!equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, bleed_heal))
+				healing_someone = FALSE
+				return
+
+			clear_main_hand()
 			healing_someone = TRUE
-			equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, bleed_heal)
 			sleep(short_action_delay)
 			bleed_heal.ai_use(tied_human, src, target)
 			if(QDELETED(bleed_heal))
@@ -137,8 +142,12 @@
 			if(!bone_heal)
 				goto fire
 
+			if(!equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, bone_heal))
+				healing_someone = FALSE
+				return
+
+			clear_main_hand()
 			healing_someone = TRUE
-			equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, bone_heal)
 			sleep(short_action_delay)
 			bone_heal.ai_use(tied_human, src, target)
 			if(QDELETED(bone_heal))
@@ -164,8 +173,12 @@
 			if(!burn_heal)
 				goto pain
 
+			if(!equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, burn_heal))
+				healing_someone = FALSE
+				return
+
+			clear_main_hand()
 			healing_someone = TRUE
-			equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, burn_heal)
 			sleep(short_action_delay)
 			burn_heal.ai_use(tied_human, src, target)
 			if(QDELETED(burn_heal))
@@ -192,8 +205,12 @@
 			if(!painkiller)
 				goto tox
 
+			if(!equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, painkiller))
+				healing_someone = FALSE
+				return
+
+			clear_main_hand()
 			healing_someone = TRUE
-			equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, painkiller)
 			sleep(short_action_delay)
 			painkiller.ai_use(tied_human, src, target)
 			if(QDELETED(painkiller))
@@ -219,8 +236,12 @@
 			if(!tox_heal)
 				goto oxy
 
+			if(!equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, tox_heal))
+				healing_someone = FALSE
+				return
+
+			clear_main_hand()
 			healing_someone = TRUE
-			equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, tox_heal)
 			sleep(short_action_delay)
 			tox_heal.ai_use(tied_human, src, target)
 			if(QDELETED(tox_heal))
@@ -246,11 +267,16 @@
 				healing_someone = FALSE
 				return
 
+			if(!equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, oxy_heal))
+				healing_someone = FALSE
+				return
+
+			clear_main_hand()
 			healing_someone = TRUE
-			equip_item_from_equipment_map(HUMAN_AI_HEALTHITEMS, oxy_heal)
 			sleep(short_action_delay)
 			oxy_heal.ai_use(tied_human, src, target)
 			if(QDELETED(oxy_heal))
+				healing_someone = FALSE
 				return
 
 			var/storage_slot = storage_has_room(oxy_heal)
