@@ -58,18 +58,18 @@
 		return ONGOING_ACTION_COMPLETED
 
 	var/turf/throw_target
-	for(var/turf/T in shuffle(RANGE_TURFS(2, target_turf)))
-		var/distance = get_dist(tied_human, T)
+	for(var/turf/turf in shuffle(RANGE_TURFS(2, target_turf)))
+		var/distance = get_dist(tied_human, turf)
 		if(distance <= 2) // basic precautions
 			continue
 
 		if(distance > brain.view_distance)
 			continue
 
-		if(locate(/turf/closed) in get_line(tied_human, T))
+		if(locate(/turf/closed) in get_line(tied_human, turf))
 			continue
 
-		throw_target = T
+		throw_target = turf
 		break
 
 	if(!throw_target)

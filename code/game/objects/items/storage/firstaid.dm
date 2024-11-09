@@ -532,7 +532,7 @@
 		remove_from_storage(pill, user)
 		pill.attack(target, user)
 		COOLDOWN_START(ai_brain, pill_use_cooldown, 20 SECONDS)
-		sleep(ai_brain.medium_action_delay)
+		sleep(ai_brain.medium_action_delay * ai_brain.action_delay_mult)
 
 /obj/item/storage/pill_bottle/proc/choose_color(mob/user)
 	if(!user)

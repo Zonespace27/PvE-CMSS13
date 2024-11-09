@@ -12,7 +12,6 @@ GLOBAL_LIST_INIT_TYPED(AI_actions, /datum/ai_action, setup_ai_actions())
 	var/name
 	var/datum/human_ai_brain/brain
 	var/action_flags = null
-	var/order = FALSE // REDUNDANT DELETE DELETE REMOVE EXTERMINATE
 
 /datum/ai_action/proc/get_weight(datum/human_ai_brain/brain)
 	return 0
@@ -41,6 +40,7 @@ GLOBAL_LIST_INIT_TYPED(AI_actions, /datum/ai_action, setup_ai_actions())
 	return
 
 /datum/ai_action/Destroy(force, ...)
+	brain.ongoing_actions -= src
 	brain = null
 	return ..()
 

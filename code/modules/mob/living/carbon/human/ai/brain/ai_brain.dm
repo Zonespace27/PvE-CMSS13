@@ -145,7 +145,6 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 			if(ONGOING_ACTION_UNFINISHED_BLOCK)
 				return
 			if(ONGOING_ACTION_COMPLETED)
-				ongoing_actions -= action
 				qdel(action)
 
 /datum/human_ai_brain/proc/set_target(mob/living/new_target)

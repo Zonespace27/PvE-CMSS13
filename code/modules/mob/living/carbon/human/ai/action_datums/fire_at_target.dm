@@ -11,8 +11,7 @@
 	if(brain.tried_reload)
 		return 0
 
-	var/obj/item/weapon/gun/primary_weapon = brain.primary_weapon
-	if(!primary_weapon)
+	if(!brain.primary_weapon)
 		return 0
 
 	var/turf/target_turf = brain.target_turf
@@ -21,7 +20,7 @@
 	if(!brain.current_target && !should_fire_offscreen)
 		return 0
 
-	if((get_dist(brain.tied_human, target_turf) > brain.gun_data.maximum_range) && !should_fire_offscreen)
+	if((get_dist(brain.tied_human, target_turf) > brain.view_distance) && !should_fire_offscreen)
 		return 0
 
 	if(brain.should_reload())

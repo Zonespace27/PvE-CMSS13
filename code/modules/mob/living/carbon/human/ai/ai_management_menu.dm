@@ -150,7 +150,7 @@
 	ai_human.face_dir(pick(GLOB.cardinals))
 	ai_human.forceMove(get_turf(mob))
 
-/client/proc/make_human_ai(mob/living/carbon/human/H in GLOB.human_mob_list)
+/client/proc/make_human_ai(mob/living/carbon/human/mob in GLOB.human_mob_list)
 	set name = "Make AI"
 	set desc = "Add AI functionality to a human."
 	set category = null
@@ -158,17 +158,17 @@
 	if(!check_rights(R_DEBUG|R_ADMIN))
 		return
 
-	if(QDELETED(H))
+	if(QDELETED(mob))
 		return //mob is garbage collected
 
-	if(H.GetComponent(/datum/component/human_ai))
-		to_chat(usr, SPAN_WARNING("[H] already has an assigned AI."))
+	if(mob.GetComponent(/datum/component/human_ai))
+		to_chat(usr, SPAN_WARNING("[mob] already has an assigned AI."))
 		return
 
-	if(H.ckey && alert("This mob is being controlled by [H.ckey]. Are you sure you wish to add AI to it?","Make AI","Yes","No") != "Yes")
+	if(mob.ckey && alert("This mob is being controlled by [mob.ckey]. Are you sure you wish to add AI to it?","Make AI","Yes","No") != "Yes")
 		return
 
-	H.AddComponent(/datum/component/human_ai)
-	H.get_ai_brain().appraise_inventory()
+	mob.AddComponent(/datum/component/human_ai)
+	mob.get_ai_brain().appraise_inventory()
 
-	message_admins("[key_name_admin(usr)] assigned an AI component to [H.real_name].")
+	message_admins("[key_name_admin(usr)] assigned an AI component to [mob.real_name].")

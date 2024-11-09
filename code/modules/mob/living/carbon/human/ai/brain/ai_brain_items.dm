@@ -330,42 +330,38 @@
 							continue search_loop
 						break
 
-				to_pickup += thing
-				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+				add_to_pickup(thing)
 
 			if(istype(thing, /obj/item/storage/belt) && !container_refs["belt"])
-				to_pickup += thing
-				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+				add_to_pickup(thing)
 
 			if(istype(thing, /obj/item/storage/backpack) && !container_refs["backpack"])
-				to_pickup += thing
-				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+				add_to_pickup(thing)
 
 			if(istype(thing, /obj/item/storage/pouch) && (!container_refs["left_pocket"] || !container_refs["right_pocket"]))
-				to_pickup += thing
-				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+				add_to_pickup(thing)
 
 			var/storage_spot = storage_has_room(thing)
 			if(!storage_spot || !thing.ai_can_use(tied_human, src, tied_human))
 				continue
 
 			if(thing.flags_human_ai & HEALING_ITEM)
-				to_pickup += thing
-				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+				add_to_pickup(thing)
 
 			if((thing.flags_human_ai & AMMUNITION_ITEM) && primary_weapon)
 				var/obj/item/ammo_magazine/mag = thing
 				if(istype(primary_weapon, mag.gun_type))
-					to_pickup += thing
-					RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+					add_to_pickup(thing)
 
 			if(thing.flags_human_ai & GRENADE_ITEM)
-				to_pickup += thing
-				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+				add_to_pickup(thing)
 
 			if(thing.flags_human_ai & TOOL_ITEM) // zonenote: they can pick up 1 billion crowbars
-				to_pickup += thing
-				RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+				add_to_pickup(thing)
+
+/datum/human_ai_brain/proc/add_to_pickup(obj/item/thing)
+	RegisterSignal(thing, COMSIG_PARENT_QDELETING, PROC_REF(on_item_delete), TRUE)
+	to_pickup += thing
 
 /datum/human_ai_brain/proc/get_tool_from_equipment_map(tool_trait)
 	RETURN_TYPE(/obj/item)

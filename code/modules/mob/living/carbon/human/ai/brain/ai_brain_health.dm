@@ -85,7 +85,7 @@
 
 		clear_main_hand()
 		healing_someone = TRUE
-		sleep(short_action_delay)
+		sleep(short_action_delay * action_delay_mult)
 		brute_heal.ai_use(tied_human, src, target)
 		if(QDELETED(brute_heal))
 			goto bleed
@@ -116,7 +116,7 @@
 
 			clear_main_hand()
 			healing_someone = TRUE
-			sleep(short_action_delay)
+			sleep(short_action_delay * action_delay_mult)
 			bleed_heal.ai_use(tied_human, src, target)
 			if(QDELETED(bleed_heal))
 				goto bone
@@ -148,7 +148,7 @@
 
 			clear_main_hand()
 			healing_someone = TRUE
-			sleep(short_action_delay)
+			sleep(short_action_delay * action_delay_mult)
 			bone_heal.ai_use(tied_human, src, target)
 			if(QDELETED(bone_heal))
 				goto fire
@@ -179,7 +179,7 @@
 
 			clear_main_hand()
 			healing_someone = TRUE
-			sleep(short_action_delay)
+			sleep(short_action_delay * action_delay_mult)
 			burn_heal.ai_use(tied_human, src, target)
 			if(QDELETED(burn_heal))
 				goto pain
@@ -211,7 +211,7 @@
 
 			clear_main_hand()
 			healing_someone = TRUE
-			sleep(short_action_delay)
+			sleep(short_action_delay * action_delay_mult)
 			painkiller.ai_use(tied_human, src, target)
 			if(QDELETED(painkiller))
 				goto tox
@@ -242,7 +242,7 @@
 
 			clear_main_hand()
 			healing_someone = TRUE
-			sleep(short_action_delay)
+			sleep(short_action_delay * action_delay_mult)
 			tox_heal.ai_use(tied_human, src, target)
 			if(QDELETED(tox_heal))
 				goto oxy
@@ -273,7 +273,7 @@
 
 			clear_main_hand()
 			healing_someone = TRUE
-			sleep(short_action_delay)
+			sleep(short_action_delay * action_delay_mult)
 			oxy_heal.ai_use(tied_human, src, target)
 			if(QDELETED(oxy_heal))
 				healing_someone = FALSE

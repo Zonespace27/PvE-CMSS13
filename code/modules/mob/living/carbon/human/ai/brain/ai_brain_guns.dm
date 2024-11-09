@@ -24,7 +24,7 @@
 	return TRUE
 
 /datum/human_ai_brain/proc/unholster_primary()
-	if(tied_human.l_hand == primary_weapon || tied_human.r_hand == primary_weapon)
+	if(!primary_weapon || tied_human.l_hand == primary_weapon || tied_human.r_hand == primary_weapon)
 		return
 
 	var/cur_hand = tied_human.get_active_hand()
@@ -34,9 +34,9 @@
 	tied_human.u_equip(primary_weapon)
 	tied_human.put_in_active_hand(primary_weapon)
 
-	primary_weapon?.guaranteed_delay_time = world.time
-	primary_weapon?.wield_time = world.time
-	primary_weapon?.pull_time = world.time
+	primary_weapon.guaranteed_delay_time = world.time
+	primary_weapon.wield_time = world.time
+	primary_weapon.pull_time = world.time
 
 /datum/human_ai_brain/proc/wield_primary()
 	primary_weapon?.wield(tied_human)

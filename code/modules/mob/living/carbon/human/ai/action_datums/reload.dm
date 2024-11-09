@@ -16,7 +16,6 @@
 	return 15
 
 /datum/ai_action/reload/Destroy(force, ...)
-	brain.ongoing_actions -= src // async procs can call qdel
 	currently_reloading = FALSE
 	return ..()
 
@@ -31,6 +30,7 @@
 		return ONGOING_ACTION_COMPLETED
 
 	reload()
+	return ONGOING_ACTION_UNFINISHED
 
 /datum/ai_action/reload/proc/reload()
 	set waitfor = FALSE

@@ -14,10 +14,7 @@
 	var/datum/firearm_appraisal/gun_data = brain.gun_data
 
 	if(current_target.is_mob_incapacitated())
-		if(distance > gun_data.minimum_range)
-			return 10
-
-		if(distance < gun_data.minimum_range)
+		if(distance != gun_data.minimum_range)
 			return 10
 
 	else if(brain.in_cover)
@@ -81,8 +78,8 @@
 
 	var/moved = FALSE
 	var/relative_dir = Get_Compass_Dir(current_target, tied_human)
-	for(var/D in list(relative_dir, turn(relative_dir, 90), turn(relative_dir, -90)))
-		var/turf/destination = get_step(tied_human, D) //step_until_blocked(tied_human, D)
+	for(var/direction in list(relative_dir, turn(relative_dir, 90), turn(relative_dir, -90)))
+		var/turf/destination = get_step(tied_human, direction)
 		if(brain.move_to_next_turf(destination))
 			moved = TRUE
 			break
