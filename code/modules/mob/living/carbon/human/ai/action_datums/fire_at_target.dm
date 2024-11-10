@@ -30,10 +30,6 @@
 
 /datum/ai_action/fire_at_target/Destroy(force, ...)
 	stop_firing(brain)
-
-	// In case we delete ourselves through comsig
-	brain.ongoing_actions -= src
-
 	return ..()
 
 /datum/ai_action/fire_at_target/proc/stop_firing(datum/human_ai_brain/brain)
