@@ -75,7 +75,6 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 	in_combat = FALSE
 
-
 	target_turf = null
 	shot_at = null
 	lose_target()
@@ -93,24 +92,24 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		lose_target()
 		return
 
-	lose_target()
 	var/possible_target = get_target()
 	if(possible_target)
+		lose_target()
 		set_target(possible_target)
 
 	if(current_target)
 		enter_combat()
 
-	/// Might be wise to move this off tick and instead make it signal-based
+	// Might be wise to move this off tick and instead make it signal-based
 	item_search(range(2, tied_human))
 
-	/// List all allowed action types for AI to consider
+	// List all allowed action types for AI to consider
 	var/list/allowed_actions = action_whitelist || (GLOB.AI_actions.Copy() - action_blacklist)
 	for(var/datum/ongoing_action as anything in ongoing_actions)
 		if(is_type_in_list(ongoing_action, allowed_actions))
 			allowed_actions -= ongoing_action.type
 
-	/// Create assoc list of selected AI actions and their weight
+	// Create assoc list of selected AI actions and their weight
 	var/list/possible_actions = list()
 	for(var/action_type in shuffle(allowed_actions))
 		var/datum/ai_action/glob_ref = GLOB.AI_actions[action_type]
@@ -118,10 +117,10 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		if(weight) // No weight means we shouldn't consider this action at all
 			possible_actions[action_type] = weight
 
-	/// Sorts all allowed actions by their weight
+	// Sorts all allowed actions by their weight
 	var/list/sorted_actions = sortTim(possible_actions, GLOBAL_PROC_REF(cmp_numeric_dsc), TRUE)
 
-	/// Choose what actions to start in current process() iteration
+	// Choose what actions to start in current process() iteration
 	for(var/action_type as anything in sorted_actions)
 		var/datum/ai_action/possible_action = GLOB.AI_actions[action_type]
 
