@@ -105,7 +105,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	item_search(range(2, tied_human))
 
 	/// List all allowed action types for AI to consider
-	var/list/allowed_actions = action_whitelist || GLOB.AI_actions.Copy() - action_blacklist
+	var/list/allowed_actions = action_whitelist || (GLOB.AI_actions.Copy() - action_blacklist)
 	for(var/datum/ongoing_action as anything in ongoing_actions)
 		if(is_type_in_list(ongoing_action, allowed_actions))
 			allowed_actions -= ongoing_action.type
