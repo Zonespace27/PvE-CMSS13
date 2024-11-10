@@ -9,9 +9,12 @@
 	var/list/ai_humans_selected = list()
 
 /datum/human_ai_quick_order/Destroy(force, ...)
-	deselect_region()
 	holder.click_intercept = src
+	cornerA = null
+	cornerB = null
 	holder = null
+	holder.images -= preview
+	preview.Cut()
 	return ..()
 
 /datum/human_ai_quick_order/proc/deselect_region()

@@ -43,7 +43,7 @@
 
 /datum/human_ai_brain/proc/wield_primary_sleep()
 	wield_primary()
-	sleep(max(primary_weapon.wield_delay, short_action_delay * action_delay_mult))
+	sleep(max(primary_weapon?.wield_delay, short_action_delay * action_delay_mult))
 
 /datum/human_ai_brain/proc/holster_primary()
 	if(tied_human.s_store || (tied_human.l_hand != primary_weapon && tied_human.r_hand != primary_weapon))
