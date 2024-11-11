@@ -6,6 +6,8 @@
 	VAR_PROTECTED/list/exit_combat_lines = list()
 	VAR_PROTECTED/list/squad_member_death_lines = list()
 	VAR_PROTECTED/list/grenade_thrown_lines = list()
+	VAR_PROTECTED/list/reload_lines = list()
+	VAR_PROTECTED/list/reload_internal_mag_lines = list()
 
 	VAR_PROTECTED/list/friendly_factions = list()
 	VAR_PROTECTED/list/neutral_factions = list()
@@ -22,6 +24,12 @@
 
 	if(length(grenade_thrown_lines))
 		brain.grenade_thrown_lines = grenade_thrown_lines
+
+	if(length(reload_lines))
+		brain.reload_lines = reload_lines
+
+	if(length(reload_internal_mag_lines))
+		brain.reload_internal_mag_lines = reload_internal_mag_lines
 
 	brain.shoot_to_kill = shoot_to_kill
 	brain.friendly_factions = friendly_factions
@@ -78,7 +86,60 @@
 	friendly_factions = list(
 		FACTION_COLONIST,
 	)
-
+	in_combat_lines = list(
+		"You will never defeat us!",
+		"I will kill you!",
+		"You'll never take our homeland!",
+		"For the colonies!",
+		"Free colony!",
+		"We will triumph over these infidels!",
+		"Attack!",
+		"Charge!",
+		"Die with freedom!",
+		"Wipe 'em out!",
+		"Run for your life! You little...!",
+		"You haven't got enough yet?!",
+		"Die! You bastard!",
+		"Damn rat!",
+		"Victory is ours!",
+		"No mercy!",
+		"There will be no mercy for you!",
+		"Die!",
+		"We will die trying to protect our homes!",
+		"Give up!",
+		"For the cause!",
+		"'Till our last breath!",
+	)
+	exit_combat_lines = list(
+		"Where are they.",
+		"There's no one here.",
+		"The enemy is quiet.",
+		"It's quiet.",
+		"There may be more.",
+		"Quiet now...!",
+		"Are we done yet?",
+		"We live to fight again.",
+		"Where are they now?",
+	)
+	squad_member_death_lines = list(
+		"Get back! Get back!",
+		"I'm sorry...",
+		"Shoot! Run!",
+		"Get away!",
+		"Forgive me...!",
+		"This is for our colony!",
+		"I will avenge you!",
+		"Time for payback!",
+		"Not good!",
+		"Damn!",
+	)
+	grenade_thrown_lines = list(
+		"EAT THIS!",
+		"Grenade!",
+		"Throwing bomb!",
+		"*warcry",
+		"This is for you, invader!",
+	)
 
 /datum/human_ai_faction/uscm
 	faction = FACTION_MARINE
@@ -165,16 +226,18 @@
 		"Eliminating hostile.",
 		"Engaging.",
 		"Contact.",
-		"Viscon, proceeding."
+		"Viscon, proceeding.",
 	)
 	exit_combat_lines = list(
 		"Hostilities ceased.",
-		"Ceasing engagement."
+		"Ceasing engagement.",
 	)
 	squad_member_death_lines = list(
 		"Allied unit disabled.",
 		"Friendly unit decomissioned.",
 		"Allied unit decomissioned.",
-		"Friendly unit disabled."
+		"Friendly unit disabled.",
 	)
 	grenade_thrown_lines = list() // Wouldn't need to call this out
+	reload_lines = list() // same here
+	reload_internal_mag_lines = list()

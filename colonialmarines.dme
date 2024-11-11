@@ -1989,6 +1989,7 @@
 #include "code\modules\mob\living\carbon\human\ai\action_datums\action_datums.dm"
 #include "code\modules\mob\living\carbon\human\ai\action_datums\chase_target.dm"
 #include "code\modules\mob\living\carbon\human\ai\action_datums\fire_at_target.dm"
+#include "code\modules\mob\living\carbon\human\ai\action_datums\fire_at_target_pb.dm"
 #include "code\modules\mob\living\carbon\human\ai\action_datums\follow_leader.dm"
 #include "code\modules\mob\living\carbon\human\ai\action_datums\item_pickup.dm"
 #include "code\modules\mob\living\carbon\human\ai\action_datums\keep_distance.dm"
