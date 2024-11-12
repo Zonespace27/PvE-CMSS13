@@ -215,5 +215,6 @@ GLOBAL_LIST_INIT_TYPED(firearm_appraisals, /datum/firearm_appraisal, build_firea
 	maximum_range = 6
 	gun_types = list(
 		/obj/item/weapon/gun/pistol,
+		/obj/item/weapon/gun/revolver,
 	)
 	primary_weight = 1
