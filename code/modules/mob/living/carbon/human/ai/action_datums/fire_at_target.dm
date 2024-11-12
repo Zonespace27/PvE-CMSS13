@@ -82,7 +82,7 @@
 	if(current_target && (get_dist(tied_human, current_target) <= 1))
 		currently_firing = FALSE
 		primary_weapon.set_target(null)
-		INVOKE_ASYNC(primary_weapon, TYPE_PROC_REF(/obj/item/weapon/gun, attack), current_target, tied_human)
+		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, do_click), current_target, "", list())
 		return ONGOING_ACTION_UNFINISHED
 
 	primary_weapon?.set_target(target_turf)
