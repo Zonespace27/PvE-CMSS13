@@ -12,9 +12,6 @@
 
 	return 12
 
-/datum/ai_action/select_primary/Destroy(force, ...)
-	return ..()
-
 /datum/ai_action/select_primary/trigger_action()
 	. = ..()
 	UNLINT(decide_primary_weapon())
