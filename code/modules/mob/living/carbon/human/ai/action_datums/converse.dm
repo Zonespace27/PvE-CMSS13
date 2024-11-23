@@ -3,13 +3,18 @@
 	action_flags = ACTION_USING_MOUTH
 
 /datum/ai_action/converse/get_weight(datum/human_ai_brain/brain)
+	if(!COOLDOWN_FINISHED(brain, conversation_start_cooldown))
+		return 0
+
+	COOLDOWN_START(brain, conversation_start_cooldown, 1 SECONDS)
+
 	if(brain.in_combat || brain.in_conversation || (brain.tied_human.health < HEALTH_THRESHOLD_CRIT))
 		return 0
 
 	if(!prob(brain.conversation_start_prob))
 		return 0
 
-	return 5
+	return 1
 
 /datum/ai_action/converse/trigger_action()
 	. = ..()
@@ -27,14 +32,29 @@
 	if(length(ai_nearby) <= 1)
 		return ONGOING_ACTION_COMPLETED
 
-	if(length(ai_nearby) > length(GLOB.human_ai_conversations))
+	var/datum/human_ai_conversation/picked_convo
+	var/picked_index
+
+	for(var/i = length(GLOB.human_ai_conversations), i > 1, i--)
+		var/list/viable_conversations = list()
+		for(var/datum/human_ai_conversation/convo as anything in GLOB.human_ai_conversations[i])
+			if(!convo.conversation_allowed(brain))
+				continue
+			viable_conversations += convo
+
+		if(!length(viable_conversations))
+			continue
+
+		picked_index = i
+		picked_convo = pick(viable_conversations)
+
+	if(length(ai_nearby) > picked_index)
 		var/list/cut_down_ai_nearby = list()
-		for(var/i in 1 to length(GLOB.human_ai_conversations))
+		for(var/i in 1 to picked_index)
 			cut_down_ai_nearby += pick_n_take(ai_nearby)
 		ai_nearby = cut_down_ai_nearby
 
-	var/convo_type = pick(GLOB.human_ai_conversations[length(ai_nearby)])
-	var/datum/human_ai_conversation/gotten_convo = new convo_type
+	var/datum/human_ai_conversation/gotten_convo = picked_convo
 	INVOKE_ASYNC(gotten_convo, TYPE_PROC_REF(/datum/human_ai_conversation, initiate_conversation), ai_nearby)
 	return ONGOING_ACTION_COMPLETED
 
