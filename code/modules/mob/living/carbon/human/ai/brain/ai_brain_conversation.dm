@@ -13,7 +13,9 @@ GLOBAL_LIST_INIT(human_ai_conversations, initialize_human_ai_conversations())
 
 /datum/human_ai_conversation
 	var/amount_ai_involved = 2
-	/// The time is how long to delay after saying something
+	/// P#: The AI of that number (randomly assigned when conversation is created) will say the message after the P#.
+	/// You can use || to divide one message into multiple that the AI will randomly choose between.
+	/// D #: Will delay the conversation for however many deciseconds listed.
 	var/list/conversation_data = list(
 		"P1 Message 1",
 		"D 25",
@@ -74,5 +76,5 @@ GLOBAL_LIST_INIT(human_ai_conversations, initialize_human_ai_conversations())
 
 /datum/human_ai_brain
 	var/in_conversation = FALSE
-	var/conversation_start_prob = 0.15 // at 1 chance / sec, this'll mean we hit the equivalent of a 50% chance of a conversation at ~90 chances, which would take ~90 seconds
+	var/conversation_start_prob = 0.75 // at 1 chance / sec, this'll mean we hit the equivalent of a 50% chance of a conversation at ~90 chances, which would take ~90 seconds
 	COOLDOWN_DECLARE(conversation_start_cooldown)
