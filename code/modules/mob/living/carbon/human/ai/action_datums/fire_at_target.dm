@@ -15,7 +15,7 @@
 		return 0
 
 	var/turf/target_turf = brain.target_turf
-	var/should_fire_offscreen = (target_turf && !COOLDOWN_FINISHED(brain, fire_offscreen) && brain.gun_data.offscreen_fire)
+	var/should_fire_offscreen = (target_turf && !COOLDOWN_FINISHED(brain, fire_offscreen) && (brain.gun_data.maximum_range <= brain.view_distance))
 
 	if(!brain.current_target && !should_fire_offscreen)
 		return 0
@@ -78,7 +78,7 @@
 	RegisterSignal(tied_human, COMSIG_MOB_FIRED_GUN, PROC_REF(on_gun_fire), TRUE)
 
 	// Handling point-blank through attack()
-	var/mob/living/current_target = brain.current_target
+	var/atom/movable/current_target = brain.current_target
 	if(current_target && (get_dist(tied_human, current_target) <= 1))
 		currently_firing = FALSE
 		primary_weapon.set_target(null)
@@ -167,12 +167,12 @@
 		shoot_next = target_turf
 
 	else if(ismob(brain.current_target))
-		var/mob/current_mob_target = brain.current_target
-		if(current_mob_target.stat == DEAD)
+		var/mob/mob_target = brain.current_target
+		if(mob_target.stat == DEAD)
 			qdel(src)
 			return
 
-		var/is_unconscious = (current_mob_target.stat == UNCONSCIOUS || (locate(/datum/effects/crit) in current_mob_target.effects_list))
+		var/is_unconscious = (mob_target.stat == UNCONSCIOUS || (locate(/datum/effects/crit) in mob_target.effects_list))
 		if(!brain.shoot_to_kill && is_unconscious)
 			brain.lose_target()
 			qdel(src)

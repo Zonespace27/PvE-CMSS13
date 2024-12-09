@@ -397,6 +397,10 @@
 
 			if(!primary_weapon && isgun(thing))
 				var/obj/item/weapon/gun/thing_gun = thing
+				for(var/item in to_pickup)
+					if(isgun(item)) // One weapon at a time
+						continue search_loop
+
 				for(var/datum/firearm_appraisal/appraisal as anything in GLOB.firearm_appraisals)
 					if(is_type_in_list(thing_gun, appraisal.gun_types))
 						if(appraisal.disposable && thing_gun.current_mag?.current_rounds <= 0)
