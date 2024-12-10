@@ -154,11 +154,11 @@
 		else
 			tied_human.drop_held_item(brute_heal)
 #ifdef TESTING
-		to_chat(world, "[tied_human.name] healed brute damage using [brute_heal].")
+		to_chat(world, "[tied_human.name] healed brute damage of [target.name] using [brute_heal].")
 #endif
 
 	bleed:
-		if(tied_human.is_bleeding())
+		if(target.is_bleeding())
 			var/obj/item/bleed_heal
 			for(var/obj/item/heal_item as anything in equipment_map[HUMAN_AI_HEALTHITEMS])
 				if(is_type_in_list(heal_item, bleed_heal_items) && heal_item.ai_can_use(tied_human, src, target))
@@ -185,12 +185,12 @@
 			else
 				tied_human.drop_held_item(bleed_heal)
 #ifdef TESTING
-			to_chat(world, "[tied_human.name] fixed bleeding using [bleed_heal].")
+			to_chat(world, "[tied_human.name] fixed bleeding of [target.name] using [bleed_heal].")
 #endif
 
 	// Doesn't support bone-healing chems
 	bone:
-		if(tied_human.has_broken_limbs())
+		if(target.has_broken_limbs())
 			var/obj/item/bone_heal
 			for(var/obj/item/heal_item as anything in equipment_map[HUMAN_AI_HEALTHITEMS])
 				if(is_type_in_list(heal_item, bonebreak_heal_items) && heal_item.ai_can_use(tied_human, src, target))
@@ -217,11 +217,11 @@
 			else
 				tied_human.drop_held_item(bone_heal)
 #ifdef TESTING
-			to_chat(world, "[tied_human.name] splinted a fracture using [bone_heal].")
+			to_chat(world, "[tied_human.name] splinted a fracture of [target.name] using [bone_heal].")
 #endif
 
 	fire:
-		if(tied_human.getFireLoss() > damage_problem_threshold)
+		if(target.getFireLoss() > damage_problem_threshold)
 			var/obj/item/burn_heal
 			for(var/obj/item/heal_item as anything in equipment_map[HUMAN_AI_HEALTHITEMS])
 				if(is_type_in_list(heal_item, burn_heal_items) && heal_item.ai_can_use(tied_human, src, target))
@@ -248,12 +248,12 @@
 			else
 				tied_human.drop_held_item(burn_heal)
 #ifdef TESTING
-			to_chat(world, "[tied_human.name] healed burn damage using [burn_heal].")
+			to_chat(world, "[tied_human.name] healed burn damage of [target.name] using [burn_heal].")
 #endif
 
 	pain:
 		// This has the issue of the AI taking multiple painkillers if high on pain, despite them not stacking. Not worth fixing atm
-		if(tied_human.pain.get_pain_percentage() > pain_percentage_threshold)
+		if(target.pain.get_pain_percentage() > pain_percentage_threshold)
 			var/obj/item/painkiller
 			for(var/obj/item/heal_item as anything in equipment_map[HUMAN_AI_HEALTHITEMS])
 				if(is_type_in_list(heal_item, painkiller_items) && heal_item.ai_can_use(tied_human, src, target))
@@ -280,11 +280,11 @@
 			else
 				tied_human.drop_held_item(painkiller)
 #ifdef TESTING
-			to_chat(world, "[tied_human.name] healed pain using [painkiller].")
+			to_chat(world, "[tied_human.name] healed pain of [target.name] using [painkiller].")
 #endif
 
 	tox:
-		if(tied_human.getToxLoss() > damage_problem_threshold)
+		if(target.getToxLoss() > damage_problem_threshold)
 			var/obj/item/tox_heal
 			for(var/obj/item/heal_item as anything in equipment_map[HUMAN_AI_HEALTHITEMS])
 				if(is_type_in_list(heal_item, tox_heal_items) && heal_item.ai_can_use(tied_human, src, target))
@@ -311,11 +311,11 @@
 			else
 				tied_human.drop_held_item(tox_heal)
 #ifdef TESTING
-			to_chat(world, "[tied_human.name] healed tox damage using [tox_heal].")
+			to_chat(world, "[tied_human.name] healed tox damage of [target.name] using [tox_heal].")
 #endif
 
 	oxy:
-		if(tied_human.getOxyLoss() > damage_problem_threshold)
+		if(target.getOxyLoss() > damage_problem_threshold)
 			var/obj/item/oxy_heal
 			for(var/obj/item/heal_item as anything in equipment_map[HUMAN_AI_HEALTHITEMS])
 				if(is_type_in_list(heal_item, oxy_heal_items) && heal_item.ai_can_use(tied_human, src, target))
@@ -343,6 +343,6 @@
 			else
 				tied_human.drop_held_item(oxy_heal)
 #ifdef TESTING
-			to_chat(world, "[tied_human.name] healed oxygen damage using [oxy_heal].")
+			to_chat(world, "[tied_human.name] healed oxygen damage of [target.name] using [oxy_heal].")
 #endif
 	healing_someone = FALSE
