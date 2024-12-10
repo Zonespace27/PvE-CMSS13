@@ -279,7 +279,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 		return
 
 	if(in_combat)
-		tied_human.a_intent = INTENT_DISARM
+		tied_human.a_intent_change(INTENT_DISARM)
 		lose_target()
 		say_exit_combat_line()
 		if(!sniper_home)

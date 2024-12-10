@@ -120,9 +120,11 @@
 
 /datum/human_ai_brain/proc/unholster_any_weapon()
 	if(unholster_melee())
+		tied_human.a_intent_change(INTENT_DISARM)
 		return
 	if(primary_weapon)
 		unholster_primary()
 		ensure_primary_hand(primary_weapon)
+		tied_human.a_intent_change(INTENT_DISARM)
 		return
 	// insert any viable weapon slot macros in here

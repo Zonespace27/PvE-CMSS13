@@ -54,8 +54,7 @@
 		return ONGOING_ACTION_UNFINISHED
 
 	var/mob/living/carbon/tied_human = brain.tied_human
-	if(!(primary_weapon in tied_human.get_hands()))
-		brain.unholster_primary()
+	brain.unholster_primary()
 
 	var/datum/firearm_appraisal/gun_data = brain.gun_data
 	gun_data.before_fire(primary_weapon, tied_human, brain)
@@ -73,7 +72,7 @@
 		return ONGOING_ACTION_UNFINISHED
 
 	tied_human.face_atom(target_turf)
-	tied_human.a_intent = INTENT_HARM
+	tied_human.a_intent_change(INTENT_HARM)
 
 	RegisterSignal(tied_human, COMSIG_MOB_FIRED_GUN, PROC_REF(on_gun_fire), TRUE)
 
@@ -121,7 +120,7 @@
 	var/turf/target_turf = brain.target_turf
 
 	var/mob/living/carbon/tied_human = brain.tied_human
-	tied_human.a_intent = INTENT_HARM
+	tied_human.a_intent_change(INTENT_HARM)
 
 	brain.shot_at = get_turf(target_turf)
 	tied_human.face_atom(target_turf)

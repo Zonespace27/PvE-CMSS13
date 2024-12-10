@@ -6,7 +6,7 @@
 	if(!brain.current_target)
 		return 0
 
-	if(!brain.tried_reload && brain.primary_weapon && length(brain.secondary_weapons))
+	if(!brain.tried_reload && (brain.primary_weapon || length(brain.secondary_weapons)))
 		return 0
 
 	return 3
@@ -23,16 +23,17 @@
 	if(brain.current_cover && !brain.in_cover)
 		return ONGOING_ACTION_COMPLETED
 
-	if(!brain.tried_reload && brain.primary_weapon && length(brain.secondary_weapons))
+	if(!brain.tried_reload && (brain.primary_weapon || length(brain.secondary_weapons)))
 		return ONGOING_ACTION_COMPLETED
 
 	var/mob/tied_human = brain.tied_human
+	if(get_dist(tied_human, brain.current_target) <= 1)
+		tied_human.a_intent_change(INTENT_HARM)
+		brain.unholster_any_weapon()
+		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, do_click), brain.current_target, "", list())
+		tied_human.face_atom(brain.current_target)
+
 	if(!brain.move_to_next_turf(get_turf(brain.current_target)))
 		return ONGOING_ACTION_COMPLETED
-
-	if(get_dist(tied_human, brain.current_target) <= 1)
-		brain.unholster_any_weapon()
-		tied_human.a_intent = INTENT_HARM
-		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, do_click), brain.current_target, "", list())
 
 	return ONGOING_ACTION_COMPLETED

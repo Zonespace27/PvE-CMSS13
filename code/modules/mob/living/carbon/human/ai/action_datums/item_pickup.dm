@@ -4,6 +4,9 @@
 	var/obj/item/to_pickup
 
 /datum/ai_action/item_pickup/get_weight(datum/human_ai_brain/brain)
+	if(brain.ignore_looting)
+		return 0
+
 	if(!length(brain.to_pickup))
 		return 0
 

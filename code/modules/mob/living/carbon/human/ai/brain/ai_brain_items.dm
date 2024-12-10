@@ -3,6 +3,8 @@
 
 	var/list/obj/item/to_pickup = list()
 
+	var/ignore_looting = FALSE
+
 	/// list("object_type" = list(object_ref = "slot")
 	var/list/equipment_map = list(
 		HUMAN_AI_HEALTHITEMS = list(),
