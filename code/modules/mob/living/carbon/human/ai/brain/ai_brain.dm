@@ -84,6 +84,7 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 
 	ongoing_actions.Cut()
 	to_pickup.Cut()
+	lose_injured_ally()
 
 /datum/human_ai_brain/process(delta_time)
 	if(tied_human.is_mob_incapacitated())
@@ -96,6 +97,9 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	if(tied_human.resting)
 		tied_human.set_resting(FALSE, TRUE)
 
+	if(tied_human.buckled)
+		tied_human.set_buckled(FALSE) // AI never buckle themselves into chairs at the moment, change if this becomes the case
+
 	if(treat_allies && !found_injured_ally)
 		set_injured_ally(get_injured_ally())
 
@@ -105,7 +109,6 @@ GLOBAL_LIST_EMPTY(human_ai_brains)
 	if(current_target)
 		enter_combat()
 
-	// Might be wise to move this off tick and instead make it signal-based
 	item_search(range(2, tied_human))
 
 	// List all allowed action types for AI to consider

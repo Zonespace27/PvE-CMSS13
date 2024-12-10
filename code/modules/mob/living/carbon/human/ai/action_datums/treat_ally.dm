@@ -34,21 +34,20 @@
 	if(brain.current_target)
 		return ONGOING_ACTION_COMPLETED
 
-	var/found_injured_ally = brain.found_injured_ally
-	if(!found_injured_ally)
+	if(!brain.found_injured_ally)
 		return ONGOING_ACTION_COMPLETED
 
 	if(brain.healing_someone)
 		return ONGOING_ACTION_UNFINISHED
 
 	var/mob/tied_human = brain.tied_human
-	if(get_dist(found_injured_ally, tied_human) > 1)
-		if(!brain.move_to_next_turf(get_turf(found_injured_ally)))
+	if(get_dist(brain.found_injured_ally, tied_human) > 1)
+		if(!brain.move_to_next_turf(get_turf(brain.found_injured_ally)))
 			return ONGOING_ACTION_COMPLETED
 		return ONGOING_ACTION_UNFINISHED
 
-	if(brain.healing_start_check(found_injured_ally))
-		brain.start_healing(found_injured_ally)
+	if(brain.healing_start_check(brain.found_injured_ally))
+		brain.start_healing(brain.found_injured_ally)
 		return ONGOING_ACTION_UNFINISHED
 
 	return ONGOING_ACTION_COMPLETED

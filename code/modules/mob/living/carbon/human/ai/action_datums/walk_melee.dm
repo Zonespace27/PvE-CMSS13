@@ -14,8 +14,7 @@
 /datum/ai_action/walk_melee/trigger_action()
 	. = ..()
 
-	var/atom/movable/current_target = brain.current_target
-	if(!current_target)
+	if(!brain.current_target)
 		return ONGOING_ACTION_COMPLETED
 
 	if(brain.active_grenade_found)
@@ -28,12 +27,12 @@
 		return ONGOING_ACTION_COMPLETED
 
 	var/mob/tied_human = brain.tied_human
-	if(!brain.move_to_next_turf(get_turf(current_target)))
+	if(!brain.move_to_next_turf(get_turf(brain.current_target)))
 		return ONGOING_ACTION_COMPLETED
 
-	if(get_dist(tied_human, current_target) <= 1)
+	if(get_dist(tied_human, brain.current_target) <= 1)
 		brain.unholster_any_weapon()
 		tied_human.a_intent = INTENT_HARM
-		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, do_click), current_target, "", list())
+		INVOKE_ASYNC(tied_human, TYPE_PROC_REF(/mob, do_click), brain.current_target, "", list())
 
 	return ONGOING_ACTION_COMPLETED
