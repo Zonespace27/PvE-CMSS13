@@ -101,7 +101,8 @@
 		if(tile.density)
 			return FALSE
 
-		if(locate(/obj/structure/machinery/door) in tile)
+		var/obj/door = locate(/obj/structure/machinery/door) in tile
+		if(door && door.density)
 			return FALSE
 
 		for(var/mob/living/carbon/human/possible_friendly in tile)
