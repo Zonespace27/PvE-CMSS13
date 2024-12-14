@@ -6,6 +6,9 @@
 	if(!brain.quick_approach)
 		return 0
 
+	if(brain.current_target)
+		return 0
+
 	return INFINITY
 
 /datum/ai_action/quick_approach/Destroy(force, ...)
