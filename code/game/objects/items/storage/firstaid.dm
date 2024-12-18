@@ -527,7 +527,7 @@
 	var/obj/item/reagent_container/pill/pill = contents[1]
 	var/datum/reagent/reagent_datum = GLOB.chemical_reagents_list[pill.pill_initial_reagents[1]]
 
-	if((target.reagents.get_reagent_amount(reagent_datum.id) + 15) > REAGENTS_OVERDOSE)
+	if((target.reagents.get_reagent_amount(reagent_datum.id) + pill.reagents.total_volume) > reagent_datum.overdose)
 		return FALSE
 
 	if(skilllock && !skillcheck(user, SKILL_MEDICAL, SKILL_MEDICAL_MEDIC))
