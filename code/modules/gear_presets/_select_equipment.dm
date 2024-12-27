@@ -459,9 +459,9 @@ GLOBAL_LIST_EMPTY(personal_closets)
 		/obj/item/clothing/suit/armor/bulletproof,
 		/obj/item/clothing/suit/armor/vest/pilot,
 		/obj/item/clothing/suit/armor/vest/ballistic,
+		/obj/item/clothing/suit/storage/windbreaker/windbreaker_green,
 		)
 	new_human.equip_to_slot_or_del(new suitpath, WEAR_JACKET)
-
 
 /datum/equipment_preset/proc/add_rebel_ua_helmet(mob/living/carbon/human/new_human)
 	if(!istype(new_human)) return
@@ -469,7 +469,11 @@ GLOBAL_LIST_EMPTY(personal_closets)
 		/obj/item/clothing/head/durag/black,
 		/obj/item/clothing/head/durag,
 		/obj/item/clothing/head/skullcap,
+		/obj/item/clothing/head/cmcap,
 		/obj/item/clothing/head/cmcap/khaki,
+		/obj/item/clothing/head/cmcap/bridge,
+		/obj/item/clothing/head/cmcap/boonie,
+		/obj/item/clothing/head/cmcap/boonie/tan,
 		/obj/item/clothing/head/headband/red,
 		/obj/item/clothing/head/headband/red,
 		/obj/item/clothing/head/headband/tan,
@@ -478,6 +482,7 @@ GLOBAL_LIST_EMPTY(personal_closets)
 		/obj/item/clothing/head/headband,
 		/obj/item/clothing/head/helmet/marine,
 		/obj/item/clothing/head/helmet/marine,
+		/obj/item/clothing/head/helmet/marine/veteran/ua_riot,
 		/obj/item/clothing/head/helmet/marine/veteran/ua_riot,
 		/obj/item/clothing/head/helmet/marine/veteran/ua_riot,
 		/obj/item/clothing/head/helmet/marine/veteran/ua_riot,
@@ -497,7 +502,7 @@ GLOBAL_LIST_EMPTY(personal_closets)
 	new_human.equip_to_slot_or_del(new shoespath, WEAR_FEET)
 
 
-/datum/equipment_preset/proc/spawn_rebel_gloves(mob/living/carbon/human/new_human)
+/datum/equipment_preset/proc/add_rebel_gloves(mob/living/carbon/human/new_human)
 	if(!istype(new_human)) return
 	var/glovespath = pick(
 		/obj/item/clothing/gloves/marine,

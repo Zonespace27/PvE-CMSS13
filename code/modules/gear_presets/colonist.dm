@@ -804,4 +804,40 @@
 	new_human.equip_to_slot_or_del(new /obj/item/storage/belt/marine(new_human), WEAR_WAIST)
 	//limbs
 	add_rebel_shoes(new_human)
+	add_rebel_gloves
+	spawn_rebel_weapon(new_human)
+
+/datum/equipment_preset/colonist/bluecollar/rebel/medic
+	name = "Rebel, Guerilla (Medic)"
+	idtype = /obj/item/card/id/dogtag
+	paygrades = list(PAY_SHORT_REB = JOB_PLAYTIME_TIER_0)
+
+/datum/equipment_preset/colonist/bluecollar/rebel/medic/get_assignment(mob/living/carbon/human/new_human)
+	if(prob(85))
+		return "Medic"
+	return "Corpsman"
+
+/datum/equipment_preset/colonist/bluecollar/rebel/medic/load_gear(mob/living/carbon/human/new_human)
+	new_human.undershirt = "undershirt"
+	//back
+	new_human.equip_to_slot_or_del(new /obj/item/storage/backpack/marine/satchel/tech(new_human), WEAR_BACK)
+	new_human.equip_to_slot_or_del(new /obj/item/tool/shovel/etool/folded(new_human), WEAR_IN_BACK)
+	new_human.equip_to_slot_or_del(new /obj/item/storage/box/MRE(new_human), WEAR_IN_BACK)
+	new_human.equip_to_slot_or_del(new /obj/item/reagent_container/food/drinks/flask/canteen, WEAR_IN_BACK)
+	new_human.equip_to_slot_or_del(new /obj/item/tool/surgery/surgical_line(new_human), WEAR_IN_BACK)
+	new_human.equip_to_slot_or_del(new /obj/item/tool/surgery/synthgraft(new_human), WEAR_IN_BACK)
+	new_human.equip_to_slot_or_del(new /obj/item/storage/firstaid/regular(new_human), WEAR_IN_BACK)
+	new_human.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv(new_human), WEAR_IN_BACK)
+	//face
+	new_human.equip_to_slot_or_del(new /obj/item/device/radio/headset/distress/CLF(new_human), WEAR_L_EAR)
+	//head
+	add_rebel_ua_helmet(new_human)
+	//uniform
+	add_rebel_uniform(new_human)
+	//jacket
+	add_rebel_suit(new_human)
+	//waist
+	new_human.equip_to_slot_or_del(new /obj/item/storage/belt/medical/lifesaver/full(new_human), WEAR_WAIST)
+	//limbs
+	add_rebel_shoes(new_human)
 	spawn_rebel_weapon(new_human)
