@@ -34,7 +34,7 @@ United States Aerospace Force
 	)
 
 /datum/skills/corpsman
-	name = "Hospital Corpsma"
+	name = "Hospital Corpsman"
 	skills = list(
 		SKILL_FIREMAN = SKILL_FIREMAN_EXPERT,
 		SKILL_VEHICLE = SKILL_VEHICLE_DEFAULT,
