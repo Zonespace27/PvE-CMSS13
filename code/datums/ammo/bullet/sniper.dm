@@ -99,6 +99,10 @@
 	damage = 80
 	penetration = ARMOR_PENETRATION_TIER_10
 
+/datum/ammo/bullet/sniper/upp/weak
+	name = "sniper bullet"
+	penetration = ARMOR_PENETRATION_TIER_1
+
 /datum/ammo/bullet/sniper/upp_pve
 	name = "high-power sniper bullet"
 	damage = 180
